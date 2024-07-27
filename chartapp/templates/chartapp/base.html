@@ -1,0 +1,26 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}ChartApp{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'chartapp/css/style.css' %}">
+</head>
+<body>
+    <div class="navbar">
+        <a href="{% url 'home' %}" class="navbar-brand">ChartApp</a>
+        <div class="navbar-links">
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'chart' %}">Chart</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}">Login</a>
+                <a href="{% url 'register' %}">Register</a>
+            {% endif %}
+        </div>
+    </div>
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

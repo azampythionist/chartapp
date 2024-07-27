@@ -1,0 +1,35 @@
+{% extends "chartapp/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <h2>Login</h2>
+    <form id="loginForm">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn">Login</button>
+    </form>
+    <div id="loginErrors"></div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#loginForm').submit(function(event) {
+            event.preventDefault();
+            $.ajax({
+                url: "{% url 'login' %}",
+                type: "POST",
+                data: $(this).serialize(),
+                success: function() {
+                    window.location.href = "{% url 'home' %}";
+                },
+                error: function(xhr) {
+                    var errors = JSON.parse(xhr.responseText);
+                    $('#loginErrors').html('<p class="error">Login failed. ' + errors.errors + '</p>');
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

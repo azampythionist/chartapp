@@ -1,0 +1,4 @@
+db.sqlite3
+myvenv/
+chartapp/__pycache__/
+chartapp/migrations/

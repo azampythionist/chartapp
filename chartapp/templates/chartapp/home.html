@@ -1,0 +1,58 @@
+{% extends "chartapp/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <h2>Welcome, {{ user.username }}!</h2>
+    <button class="btn" id="openModalBtn">Click to Choose</button>
+</div>
+
+<!-- Modal -->
+<div id="chartModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeModalBtn">&times;</span>
+        <h2>Choose Chart Type</h2>
+        <select id="chartTypeSelect">
+            <option value="">Select Chart Type</option>
+            <option value="bar">Bar Chart</option>
+            <option value="line">Line Chart</option>
+        </select>
+        <button class="btn" id="chooseChartTypeBtn">Choose</button>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#openModalBtn').click(function() {
+            $('#chartModal').show();
+        });
+
+        $('#closeModalBtn').click(function() {
+            $('#chartModal').hide();
+        });
+
+        $('#chooseChartTypeBtn').click(function() {
+            var chartType = $('#chartTypeSelect').val();
+            if (chartType) {
+                $.ajax({
+                    url: "{% url 'set_chart_type' %}",
+                    type: "POST",
+                    data: {
+                        'chart_type': chartType,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function() {
+                        window.location.href = "{% url 'chart' %}";
+                    },
+                    error: function(xhr) {
+                        alert('An error occurred: ' + xhr.responseText);
+                    }
+                });
+            } else {
+                alert('Please select a chart type.');
+            }
+        });
+    });
+</script>
+{% endblock %}
