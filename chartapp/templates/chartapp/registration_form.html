@@ -4,12 +4,12 @@
 {% block content %}
 <div class="container">
     <h2>Register</h2>
+    <div id="registerErrors"></div>
     <form id="registerForm">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn">Register</button>
     </form>
-    <div id="registerErrors"></div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -26,7 +26,11 @@
                 },
                 error: function(xhr) {
                     var response = JSON.parse(xhr.responseText);
-                    $('#registerErrors').html('<p class="error">Registration failed. ' + response.errors + '</p>');
+                    var errors = '';
+                    $.each(JSON.parse(response.errors), function(key, value) {
+                        errors += value[0].message;
+                    });
+                    $('#registerErrors').html('<p class="error">Registration failed. ' + errors + '</p>');
                 }
             });
         });
